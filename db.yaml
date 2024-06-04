@@ -12,10 +12,10 @@
       state: latest
 
   - name: install python dependencies
-      ansible.builtin.pip:
-        name:
-        - PyMySQL
-        - cyptography
+    ansible.builtin.pip:
+      name:
+      - PyMySQL
+      - cyptography
 
   
   - name: start and enable mysqld
