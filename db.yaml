@@ -12,7 +12,7 @@
       state: latest
 
   - name: install python dependencies
-      pip:
+      ansible.builtin.pip:
         name: "{{ item }}"
       loop:
       - PyMySQL
