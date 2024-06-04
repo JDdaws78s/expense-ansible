@@ -40,4 +40,4 @@
 
   - name: set root password
     command: mysql_secure_installation --set-root-pass {{ db_password }}
-    when: db_connection_output.failed is True
+    when: db_connection_output.failed is true
