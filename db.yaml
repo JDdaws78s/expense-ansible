@@ -8,11 +8,16 @@
   tasks:
   - name: mysql install
     dnf:
-      name: "{{ item }}"
+      name: mysql-server
       state: latest
-    loop:
-    - PyMySQL
-    - mysql-server
+
+  - name: install python dependencies
+      pip:
+        name: "{{ item }}"
+      loop:
+      - PyMySQL
+      - cyptography
+
   
   - name: start and enable mysqld
     service:
