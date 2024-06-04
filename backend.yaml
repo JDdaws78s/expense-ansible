@@ -1,0 +1,70 @@
+- name: backend config
+  hosts: backend
+  become: yes
+  vars:
+    login_host: db.sureshm.onlin
+    login_password: ExpenseApp@1
+  tasks:
+    - name: diable nodejs
+      command: dnf module disable nodejs -y
+
+    - name: enable nodejs
+      command: dnf module enable nodejs:20 -y
+
+    - name: install nodejs
+      dnf:
+        name: "{{ item }}"
+        state: latest
+      loop:
+        - nodejs
+        - mysql
+    
+    - name: add user expense
+      user:
+        name: expense
+      
+    - name: create /app directory
+      file:
+        path: /app
+        state: directory
+    
+    - name: download file
+      get_url:
+        src: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+        dest: /tmp/backend.zip
+
+    - name: unzip backed to /app
+      ansible.builtin.unarchive:
+        src: /tmp/backend.zip
+        dest: /app
+        remote_src: yes
+
+    - name: install npm dependencies
+      command: npm install
+      args:
+        chdir: /app
+      
+    - name: copy backend service
+      copy:
+        src: backend.service
+        dest: /etc/systemd/system/backend.service
+    
+    - name: demon-reload
+      ansible.builtin.systemd_service:
+        state: started
+        daemon_reload: true
+
+    - name: start and enable backend
+      service:
+        name: backend
+        state: started
+        enabled: yes
+      
+    - name: load schema
+      command: mysql -h {{ login_host }} -uroot -p{{ login_password }} < /app/schema/backend.sql
+    
+    - name: start and enable backend
+      service:
+        name: backend
+        state: restarted
+        

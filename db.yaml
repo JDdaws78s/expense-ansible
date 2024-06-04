@@ -19,7 +19,6 @@
       - PyMySQL
       executable: pip3.9
 
-  
   - name: start and enable mysqld
     service:
       name: mysqld
@@ -33,4 +32,12 @@
       login_host: "{{ login_host }}"
       filter: version
     ignore_errors: yes
-    register: output
+    register: db_connection_output
+
+  - name: print output
+    debug:
+      msg: "output: {{ db_connection_output }}"
+
+  - name: set root password
+    command: mysql_secure_installation --set-root-pass {{ db_password }}
+    when: db_connection_output.failed is True
