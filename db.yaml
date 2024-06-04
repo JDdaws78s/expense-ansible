@@ -16,7 +16,7 @@
       name:
       - PyMySQL
       - cyptography
-      executable: pip 3.9
+      executable: pip3.9
 
   
   - name: start and enable mysqld
