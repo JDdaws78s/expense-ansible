@@ -1,6 +1,8 @@
 - name: db
   hosts: db
   become: yes
+  vars:
+    login_host: db.sureshm.online
   vars_prompt:
     name: db_password
     prompt: enter db password
@@ -28,7 +30,7 @@
     community.mysql.mysql_info:
       login_user: root
       login_password: "{{ db_password }}"
-      login_host: db.sureshm.online
+      login_host: "{{ login_host }}"
       filter: version
-    register: output
     ignore_errors: yes
+    register: output
