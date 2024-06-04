@@ -1,6 +1,6 @@
 - name: Frontend config
   hosts: frontend
-  vars: 
+  become: yes
   tasks:
     - name: install nginx
       dnf:
@@ -30,6 +30,7 @@
         remote_src: yes
 
     - name: copy expense conf file
+      copy:
         src: expense.conf
         dest: /etc/nginx/default.d/expense.conf
 
