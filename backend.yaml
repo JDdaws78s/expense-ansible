@@ -65,9 +65,6 @@
         target: /app/schema/backend.sql
         state: import
 
-    # - name: load schema
-    #   command: mysql -h {{ login_host }} -uroot -p{{ login_password }} < /app/schema/backend.sql
-
     - name: demon-reload
       ansible.builtin.systemd_service:
         daemon_reload: true
