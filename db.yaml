@@ -1,5 +1,30 @@
 - name: db
   hosts: db
   become: yes
+  vars_prompt:
+    name: db_password
+    prompt: enter db password
+    private: yes
   tasks:
-  - name: 
+  - name: mysql install
+    dnf:
+      name: "{{ item }}"
+      state: latest
+    loop:
+    - PyMySQL
+    - mysql-server
+  
+  - name: start and enable mysqld
+    service:
+      name: mysqld
+      state: started
+      enabled: yes
+  
+  - name: check db connection
+    community.mysql.mysql_info:
+      login_user: root
+      login_password: "{{ db_password }}"
+      login_host: db.sureshm.online
+      filter: version
+    register: output
+    ignore_errors: yes
