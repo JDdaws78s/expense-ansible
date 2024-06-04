@@ -5,13 +5,13 @@
     login_host: db.sureshm.online
     login_password: ExpenseApp@1
   tasks:
-    - name: diable nodejs
+    - name: disable nodejs
       command: dnf module disable nodejs -y
 
     - name: enable nodejs
       command: dnf module enable nodejs:20 -y
 
-    - name: install nodejs
+    - name: install nodejs and mysql
       dnf:
         name: "{{ item }}"
         state: latest
@@ -30,7 +30,7 @@
     
     - name: download file
       get_url:
-        src: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+        url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
         dest: /tmp/backend.zip
 
     - name: unzip backed to /app
