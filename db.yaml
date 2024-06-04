@@ -15,7 +15,6 @@
     ansible.builtin.pip:
       name:
       - PyMySQL
-      - cyptography
       executable: pip3.9
 
   
