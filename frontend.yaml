@@ -30,8 +30,8 @@
         remote_src: yes
 
     - name: copy expense conf file
-      src: expense.conf
-      dest: /etc/nginx/default.d/expense.conf
+        src: expense.conf
+        dest: /etc/nginx/default.d/expense.conf
 
     - name: nginx restart
       service:
