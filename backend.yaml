@@ -51,7 +51,6 @@
     
     - name: demon-reload
       ansible.builtin.systemd_service:
-        state: started
         daemon_reload: true
 
     - name: start and enable backend
@@ -64,6 +63,7 @@
       pip:
         name:
         - PyMySQL
+        - cryptography
         executable: pip3.9
 
     - name: import data to mysql
