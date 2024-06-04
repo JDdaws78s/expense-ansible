@@ -13,10 +13,9 @@
 
   - name: install python dependencies
       ansible.builtin.pip:
-        name: "{{ item }}"
-      loop:
-      - PyMySQL
-      - cyptography
+        name:
+        - PyMySQL
+        - cyptography
 
   
   - name: start and enable mysqld
