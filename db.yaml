@@ -6,7 +6,7 @@
   vars_prompt:
     name: db_password
     prompt: enter db password
-    private: yes
+    private: no
   tasks:
   - name: mysql install
     dnf:
