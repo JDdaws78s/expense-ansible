@@ -11,11 +11,12 @@
       name: mysql-server
       state: latest
 
-  - name: install python dependencies
+  - name: install python mysql dependencies
     ansible.builtin.pip:
       name:
       - PyMySQL
       - cyptography
+      executable: pip 3.9
 
   
   - name: start and enable mysqld
