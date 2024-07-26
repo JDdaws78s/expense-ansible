@@ -1,6 +1,6 @@
 - name: backend config
-  hosts: backend
   become: yes
+  hosts: backend
   vars:
     login_host: db.sureshm.online
     login_password: ExpenseApp@1
@@ -56,7 +56,7 @@
         - cryptography
         executable: pip3.9
 
-    - name: import data to mysql
+    - name: import data into mysql
       community.mysql.mysql_db:
         name: load schema
         login_host: "{{ login_host }}"
@@ -65,7 +65,7 @@
         target: /app/schema/backend.sql
         state: import
 
-    - name: demon-reload
+    - name: daemon-reload
       ansible.builtin.systemd_service:
         daemon_reload: true
 
