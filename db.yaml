@@ -4,8 +4,8 @@
   vars:
     login_host: db.sureshm.online
   vars_prompt:
-    name: db_password
-    prompt: enter db password
+    name: mysql_root_password
+    prompt: enter Mysql root password
     private: no
   tasks:
   - name: mysql install
@@ -29,16 +29,16 @@
   - name: check db connection
     community.mysql.mysql_info:
       login_user: root
-      login_password: "{{ db_password }}"
+      login_password: "{{ mysql_root_password }}"
       login_host: "{{ login_host }}"
       filter: version
     ignore_errors: yes
-    register: db_connection_output
+    register: mysql_connection_output
 
   - name: print output
     debug:
-      msg: "output: {{ db_connection_output }}"
+      msg: "output: {{ mysql_connection_output }}"
 
   - name: set root password
-    command: mysql_secure_installation --set-root-pass {{ db_password }}
-    when: db_connection_output.failed is true
+    command: mysql_secure_installation --set-root-pass {{ mysql_root_password }}
+    when: mysql_connection_output.failed is true
