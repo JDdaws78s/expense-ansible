@@ -2,42 +2,42 @@
   hosts: frontend
   become: yes
   tasks:
-    - name: install nginx
-      dnf:
-        name: nginx
-        state: latest
-    
-    - name: start and enable nginx
-      service:
-        name: nginx
-        state: started
-        enabled: yes
-    
-    - name: delete /html directory
-      file:
-        path: /usr/share/nginx/html
-        state: absent
+  - name: install nginx
+    dnf:
+      name: nginx
+      state: latest
+  
+  - name: start and enable nginx
+    service:
+      name: nginx
+      state: started
+      enabled: yes
+  
+  - name: delete /html directory
+    file:
+      path: /usr/share/nginx/html
+      state: absent
 
-    - name: create /html directory
-      file:
-        path: /usr/share/nginx/html
-        state: directory
+  - name: create /html directory
+    file:
+      path: /usr/share/nginx/html
+      state: directory
 
-    - name: unzip frontend
-      unarchive:
-        src: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
-        dest: /usr/share/nginx/html
-        remote_src: yes
+  - name: unzip frontend
+    unarchive:
+      src: https://expense-builds.s3.us-east-1.amazonaws.com/expense-frontend-v2.zip
+      dest: /usr/share/nginx/html
+      remote_src: yes
 
-    - name: copy expense conf file
-      copy:
-        src: expense.conf
-        dest: /etc/nginx/default.d/expense.conf
+  - name: copy expense conf file
+    copy:
+      src: expense.conf
+      dest: /etc/nginx/default.d/expense.conf
 
-    - name: nginx restart
-      service:
-        name: nginx
-        state: restarted
+  - name: nginx restart
+    service:
+      name: nginx
+      state: restarted
   
     
 
