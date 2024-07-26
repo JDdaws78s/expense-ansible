@@ -5,78 +5,72 @@
     login_host: db.sureshm.online
     login_password: ExpenseApp@1
   tasks:
-    - name: disable default nodejs
-      command: dnf module disable nodejs -y
+  - name: disable default nodejs
+    command: dnf module disable nodejs -y
 
-    - name: enable nodejs:20
-      command: dnf module enable nodejs:20 -y
+  - name: enable nodejs:20
+    command: dnf module enable nodejs:20 -y
 
-    - name: install nodejs and mysql
-      dnf:
-        name: "{{ item }}"
-        state: installed
-      loop:
-        - nodejs
-        - mysql
+  - name: install nodejs and mysql
+    dnf:
+      name: "{{ item }}"
+      state: installed
+    loop:
+    - nodejs
+    - mysql
     
-    - name: add user expense
-      user:
-        name: expense
+  - name: add user expense
+    user:
+      name: expense
       
-    - name: create /app directory
-      file:
-        path: /app
-        state: directory
+  - name: create /app directory
+    file:
+      path: /app
+      state: directory
     
-    - name: download file
-      get_url:
-        url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
-        dest: /tmp/backend.zip
+  - name: download file
+    get_url:
+      url: https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
+      dest: /tmp/backend.zip
 
-    - name: unzip backend to /app
-      ansible.builtin.unarchive:
-        src: /tmp/backend.zip
-        dest: /app
-        remote_src: yes
+  - name: unzip backend to /app
+    ansible.builtin.unarchive:
+      src: /tmp/backend.zip    # by default checks in ansible server
+      dest: /app
+      remote_src: yes
 
-    - name: install npm dependencies
-      command: npm install
-      args:
-        chdir: /app
+  - name: install npm dependencies
+    command: npm install
+    args:
+      chdir: /app
       
-    - name: copy backend service
-      copy:
-        src: backend.service
-        dest: /etc/systemd/system/backend.service
+  - name: copy backend service
+    copy:
+      src: backend.service
+      dest: /etc/systemd/system/backend.service
     
-    - name: install python dependencies
-      pip:
-        name:
-        - PyMySQL
-        - cryptography
-        executable: pip3.9
+  - name: install python mysql dependencies
+    pip:
+    name:
+    - PyMySQL
+    - cryptography
+    executable: pip3.9
 
-    - name: import data into mysql
-      community.mysql.mysql_db:
-        name: all
-        login_host: "{{ login_host }}"
-        login_user: root
-        login_password: "{{ login_password }}"
-        target: /app/schema/backend.sql
-        state: import
+  - name: import data into mysql
+    community.mysql.mysql_db:
+      name: all
+      login_host: "{{ login_host }}"
+      login_user: root
+      login_password: "{{ login_password }}"
+      target: /app/schema/backend.sql
+      state: import
 
-    - name: daemon-reload
-      ansible.builtin.systemd_service:
-        daemon_reload: true
+  - name: daemon-reload
+    ansible.builtin.systemd_service:
+    daemon_reload: true
 
-    - name: start and enable backend
-      service:
-        name: backend
-        state: started
-        enabled: yes
-    
-    # - name: start and enable backend
-    #   service:
-    #     name: backend
-    #     state: restarted
-        
+  - name: start and enable backend
+    service:
+      name: backend
+      state: started
+      enabled: yes
